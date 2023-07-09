@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import AddNewTask from "../AddNewTask/AddNewTask";
 import Tasks from "../Tasks/Tasks";
 import Confirm from "../Confirm";
-import { idGenerator } from '../../utils/utils'
+import EditModal from "../EditModal";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 
@@ -10,16 +10,11 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 
 export default class ToDo extends PureComponent {
     state = {
-        toDoList: [{
-            id: idGenerator(),
-            title: 'test',
-            description: 'HELLO WORLD',
-            importance: 'HIGH',
-            developer: 'Aksana'
-        }],
-
+        toDoList: [],
         checkedTasks: new Set(),
-        toggleConfirmModal: false
+        toggleConfirmModal: false,
+        showEditModal: false,
+        editTask: null
     };
 
 
@@ -97,11 +92,36 @@ export default class ToDo extends PureComponent {
     }
 
 
+    handleEditTask = (taskObj) => {
+        this.setState({
+            editTask: taskObj
+        })
+    }
+
+
+    handleSave = (editedObj) => {
+        const toDoList = [...this.state.toDoList];
+        const taskIndex = toDoList.findIndex(task => task.id === editedObj.id);
+
+
+        toDoList[taskIndex] = {
+            ...taskIndex,
+            ...editedObj,
+        }
+
+        this.setState({
+            toDoList,
+            editTask: null
+        })
+
+
+    }
+
 
 
 
     render() {
-        const { toDoList, checkedTasks, toggleConfirmModal } = this.state;
+        const { toDoList, checkedTasks, toggleConfirmModal, editTask } = this.state;
 
 
 
@@ -123,6 +143,7 @@ export default class ToDo extends PureComponent {
                                     <Tasks item={item}
                                         handleRemoveSingleTask={this.handleRemoveSingleTask}
                                         handleCheckedTasks={this.handleCheckedTasks}
+                                        handleEditTask={() => this.handleEditTask(item)}
                                         disabledButton={checkedTasks.size}
                                     />
                                 </Col>
@@ -145,6 +166,15 @@ export default class ToDo extends PureComponent {
                     handleRemovedCheckedTasks={this.handleRemovedCheckedTasks}
                     count={checkedTasks.size}
                 />
+                {
+                    !!editTask
+                    &&
+                    <EditModal
+                        onSave={this.handleSave}
+                        editTask={editTask}
+                        onCancel={() => this.handleEditTask(null)} />
+
+                }
             </Container>
         )
     }

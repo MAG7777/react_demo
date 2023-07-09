@@ -5,13 +5,7 @@ import PropTypes from 'prop-types';
 
 export default class AddNewTask extends PureComponent {
     state = {
-        toDoList: [{
-            id: idGenerator(),
-            title: 'test',
-            description: 'HELLO WORLD',
-            importance: 'HIGH',
-            developer: 'Aksana'
-        }],
+        toDoList: [],
         title: '',
         description: '',
         importance: '',
@@ -66,12 +60,19 @@ export default class AddNewTask extends PureComponent {
 
 
     }
+
+    handleAddKeyDown = (event) => {
+        if (event.key === 'Enter')
+            this.handleAddTask(event);
+    }
+
+
     render() {
         const { title, developer, importance, description } = this.state;
-        const {disabledButton} = this.props;
+        const { disabledButton } = this.props;
 
         return (
-            <form onSubmit={this.handleAddTask} >
+            <form onSubmit={this.handleAddTask} onKeyDown={this.handleAddKeyDown}>
                 <label>
                     <input
                         placeholder='title'
@@ -142,13 +143,13 @@ export default class AddNewTask extends PureComponent {
             </form>
         )
     }
-    
+
 }
 
 
 AddNewTask.propTypes = {
-    handleAddTask:PropTypes.func,
-    disabledButton:PropTypes.number,
+    handleAddTask: PropTypes.func,
+    disabledButton: PropTypes.number,
     // disabledButton:PropTypes.number.isRequired,
     // disabledButton:PropTypes.oneOf([1,5,6,'kkk', true])
     // disabledButton:PropTypes.oneOfType([PropTypes.number, PropTypes.array])

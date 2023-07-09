@@ -27,7 +27,7 @@ export default class Tasks extends PureComponent {
 
     }
     render() {
-        const { item, handleRemoveSingleTask, disabledButton } = this.props;
+        const { item, handleRemoveSingleTask, disabledButton,handleEditTask } = this.props;
         const { isChecked } = this.state;
 
         return (
@@ -60,7 +60,7 @@ export default class Tasks extends PureComponent {
                         className='m-2'
                         disabled={disabledButton}
                         variant="warning"
-                        onClick={()=>alert('Edit Button')}>
+                        onClick={()=>handleEditTask()}>
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
 
