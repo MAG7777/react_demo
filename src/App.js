@@ -1,10 +1,11 @@
 import ToDo from './components/pages/ToDo/ToDo';
 import HOCTest from './components/HOCTest';
-import SingleTask from './components/pages/SIngleTask';
+import SingleTask from './components/pages/SingleTask';
 import NoFound from './components/pages/NoFOund';
 import NavBar from './components/NavBar/NavBar';
 import { Route, Routes } from 'react-router-dom';
-import Hook from './components/HOOK';
+import MainHooks from './components/Hooks/MainHooks';
+import Wrapper from './components/Hooks/ContextHook/Wrapper';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -14,7 +15,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
     <div className="mainDiv">
-      {/* <Hook /> */}
+      {/* <Wrapper /> */}
+      {/* <MainHooks /> */}
       <NavBar />
       <Routes>
         <Route path="/" element={<ToDo />} />
