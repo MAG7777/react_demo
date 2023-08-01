@@ -19,12 +19,12 @@ export default function NavBar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
 
-                        <Link to="/">
+                        <Link to="/" className={classes.navBarItem}>
                             Home
                         </Link>
-                            <Link to="/about">
-                                About
-                            </Link>
+                        <Link to="/about">
+                            About
+                        </Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

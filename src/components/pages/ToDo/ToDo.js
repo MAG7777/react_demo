@@ -4,6 +4,7 @@ import Tasks from "../../Tasks/Tasks";
 import Confirm from "../../Confirm";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import EditModal from "../../EditModal";
+import request from "../../../utils/apis";
 
 const REACT_APP_URL_API = process.env.REACT_APP_URL_API;
 
@@ -20,18 +21,8 @@ export default class ToDo extends PureComponent {
     };
 
     componentDidMount() {
-        fetch(`${REACT_APP_URL_API}/tasks`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw response.error
-                }
-                return response.json()
-            })
+
+        request(`${REACT_APP_URL_API}/tasks`)
             .then(tasks => {
                 let toDoList = [...this.state.toDoList, ...tasks];
                 this.setState({
@@ -46,19 +37,7 @@ export default class ToDo extends PureComponent {
     handleAddTask = (neweObj) => {
         let toDoList = [...this.state.toDoList];
 
-        fetch(`${REACT_APP_URL_API}/tasks`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(neweObj)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw response.error
-                }
-                return response.json()
-            })
+        request(`${REACT_APP_URL_API}/tasks`, 'POST', neweObj)
             .then(task => {
                 toDoList.push(task);
                 this.setState({
@@ -74,15 +53,7 @@ export default class ToDo extends PureComponent {
     handleRemoveSingleTask = (taskId) => {
         let toDoList = [...this.state.toDoList];
 
-        fetch(`${REACT_APP_URL_API}/tasks/${taskId}`, {
-            method: 'DELETE',
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw response.error
-                }
-                return response.json()
-            })
+        request(`${REACT_APP_URL_API}/tasks/${taskId}`, 'DELETE')
             .then(task => {
                 toDoList = toDoList.filter(item => taskId !== item.id)
 
@@ -114,21 +85,24 @@ export default class ToDo extends PureComponent {
     handleRemovedCheckedTasks = () => {
         let toDoList = [...this.state.toDoList];
         let checkedTasks = new Set(this.state.checkedTasks);
+        const testArr = [...checkedTasks];
 
-        checkedTasks.forEach(itemId => {
-            toDoList = toDoList.filter(item => item.id !== itemId)
-        })
+        request(`${REACT_APP_URL_API}/tasks`, 'DELETE', { ids: testArr })
+            .then(task => {
+                checkedTasks.forEach(itemId => {
+                    toDoList = toDoList.filter(item => item.id !== itemId)
+                })
 
-        checkedTasks.clear()
+                checkedTasks.clear()
 
-        this.setState({
-            checkedTasks,
-            toDoList,
-            toggleConfirmModal: false
+                this.setState({
+                    checkedTasks,
+                    toDoList,
+                    toggleConfirmModal: false
 
-        })
-
-
+                })
+            })
+            .catch(error => console.log(error))
 
     }
 
@@ -154,19 +128,7 @@ export default class ToDo extends PureComponent {
     handleSaveEditedTask = (taskObj) => {
         let toDoList = [...this.state.toDoList];
 
-        fetch(`${REACT_APP_URL_API}/tasks/${taskObj.id}`, {
-            method: 'PUT',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(taskObj)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw response.error
-                }
-                return response.json()
-            })
+        request(`${REACT_APP_URL_API}/tasks/${taskObj.id}`, 'PUT', taskObj)
             .then(task => {
                 let index = toDoList.findIndex((item) => item.id === taskObj.id);
                 toDoList[index] = {
@@ -180,9 +142,6 @@ export default class ToDo extends PureComponent {
                 })
             })
             .catch(error => console.log(error))
-
-
-
 
     }
 
