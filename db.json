@@ -22,20 +22,5 @@
   "profile": {
     "name": "typicode"
   },
-  "tasks": [
-    {
-      "title": "kjnjnjfv",
-      "description": "kj f vnf vfv",
-      "importance": "medium",
-      "developer": "Aksana",
-      "id": 4
-    },
-    {
-      "id": 6,
-      "title": "0000000000000",
-      "description": "n chdc dscd",
-      "importance": "high",
-      "developer": "Hovo"
-    }
-  ]
+  "tasks": []
 }

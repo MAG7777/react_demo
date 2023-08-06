@@ -1,10 +1,10 @@
 import React, { PureComponent } from "react";
-import AddNewTaskModal from "../../AddNewTask/AddNewTask";
-import Tasks from "../../Tasks/Tasks";
-import Confirm from "../../Confirm";
+import AddNewTaskModal from "../../components/AddNewTask/AddNewTask";
+import Tasks from "../../components/Tasks/Tasks";
+import Confirm from "../../components/Confirm";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import EditModal from "../../EditModal";
-import request from "../../../utils/apis";
+import EditModal from "../../components/EditModal";
+import request from "../../utils/apis";
 
 const REACT_APP_URL_API = process.env.REACT_APP_URL_API;
 

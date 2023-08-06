@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import request from '../../utils/apis';
+import request from  '../utils/apis'
 
 const REACT_APP_URL_API = process.env.REACT_APP_URL_API;
 
