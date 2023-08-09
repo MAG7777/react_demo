@@ -1,43 +1,71 @@
-import React, { useEffect } from "react";
-import { useGetAllTasksQuery } from "../../store/api";
+import React, { useEffect, useState } from "react";
+import { useGetAllTasksQuery, useSearchTaskQuery } from "../../store/api";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllTasks } from "../../store/tasksReducer";
 import Loading from "../../components/Loading/Loading";
-import Tasks from "../../components/Tasks/Tasks";
 import TaskFunc from "../../components/Tasks/TaskFunc";
+import BasicExample from "../../components/SearchDropDown/SearchDropdown";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import AddNewTaskModalFunc from "../../components/AddNewTask/AddNewTaskModalFunc";
 
 
 
 
 export default function ToDoFunc() {
+    const [showNewTaskModal, setShowNewTaskModal] = useState(false);
+    const [searchText, setSearchText] = useState('');
     const { data, isError, isLoading } = useGetAllTasksQuery();
+
+    const { data: searchResults } = useSearchTaskQuery(searchText);
+    console.log('SSSSSSSSSSSSSSSS=====>>>', searchResults);
     const dispatch = useDispatch();
     const taskData = useSelector((state) => state.tasksReducer.toDoList);
 
 
-    useEffect(()=>{
-        if(data){
+    useEffect(() => {
+        if (data) {
             dispatch(getAllTasks(data));
         }
     }, [data])
 
 
+    const toogleMOdal = () => {
+        setShowNewTaskModal(prev => !prev)
+    }
+
+    const handleSearchChange = (event) => {
+        setSearchText(event.target.value)
+    }
+
     return (
         <>
             {isLoading && <Loading />}
             <Container fluid>
-                {/* <Row className="justify-content-center">
+                <Row className="justify-content-center">
                     <Col className="text-center mt-5">
                         <Button
                             variant="info"
                             className="w-25"
-                            onClick={this.toggleNewTaskModal}
-                            disabled={checkedTasks.size}>
+                            onClick={() => { setShowNewTaskModal(prev => !prev) }}
+                        // disabled={checkedTasks.size}
+                        >
                             Add task
                         </Button>
                     </Col>
-                </Row> */}
+                </Row>
+                <Row className="justify-content-center">
+                    <Col className="text-center mt-5">
+                        <input type="search" value={searchText} onChange={handleSearchChange} />
+                    </Col>
+                </Row>
+                {
+                    searchText.length > 0 &&
+                    <Row className="justify-content-center">
+                        <Col className="text-center mt-5" lg="6">
+                            <BasicExample tasks={searchResults} />
+                        </Col>
+                    </Row>
+                }
 
                 <Row className="mt-5">
                     {
@@ -80,13 +108,12 @@ export default function ToDoFunc() {
                         onSave={this.handleSaveEditedTask}
                     />
                 } */}
-                {/* {
+                {
                     showNewTaskModal &&
-                    <AddNewTaskModal
-                        handleAddTask={this.handleAddTask}
-                        onClose={this.toggleNewTaskModal}
+                    <AddNewTaskModalFunc
+                        onClose={toogleMOdal}
                     />
-                } */}
+                }
             </Container>
         </>)
 }
