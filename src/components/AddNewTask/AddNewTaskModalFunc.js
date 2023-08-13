@@ -44,17 +44,15 @@ export default function AddNewTaskModalFunc({ onClose }) {
         }
 
     }
-
-    const testFunc = (param) => {
-        onClose()
-        dispatch(addNewTask(param))
-    }
-
     const handleAddNewTask = () => {
+        console.log('inputFields----------->>>', inputFields);
         addNewTaskRequest(inputFields)
             // .unwrap()
             .then((res) => {
-                testFunc(res.data);
+                console.log('rrrrrrrrrrrrrrr===>>', res)
+               dispatch(addNewTask(res.data));
+               onClose();
+
             }
             )
             .catch((error) => {

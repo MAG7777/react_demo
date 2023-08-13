@@ -7,10 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import classes from './tasks.module.css';
 import { Link } from 'react-router-dom';
-import { useDispatch } from "react-redux";
-import { removeSingleTask } from "../../store/tasksReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { removeSingleTask, editTask, saveCheckedTasks } from "../../store/tasksReducer";
 
 export default function TaskFunc({ item }) {
+    const checkedTasks = useSelector(state=>state.tasksReducer.checkedTasks);
     const [isChecked, setIsChecked] = useState(false);
     const dispatch = useDispatch();
     const [deleteTasks, response] = useRemoveSingleTaskMutation();
@@ -26,10 +27,14 @@ export default function TaskFunc({ item }) {
             .catch((err) => console.log(err))
     }
 
+    const toggleCheckbox = (id)=>{
+        dispatch(saveCheckedTasks(id))
+    }
+
     return (
         <Card className={`${classes.card} ${isChecked ? classes.checkedTaskCard : ''}`}>
             <input
-                onChange={() => this.toggleCheckbox(item.id)}
+                onChange={() => toggleCheckbox(item.id)}
                 className={`${classes.cardCeckbox} m-2`}
                 type="checkbox"
             />
@@ -50,16 +55,16 @@ export default function TaskFunc({ item }) {
             <Card.Body>
                 <Button
                     className='m-2'
-                    // disabled={disabledButton}
+                    disabled={checkedTasks.length > 0}
                     variant="danger"
                     onClick={() => handleRemoveSingleTask(item.id)}>
                     <FontAwesomeIcon icon={faTrash} />
                 </Button>
                 <Button
                     className='m-2'
-                    // disabled={disabledButton}
+                    disabled={checkedTasks.length > 0}
                     variant="info"
-                // onClick={() => handleEditTask(item)}
+                    onClick={() => dispatch(editTask(item))}
                 >
                     <FontAwesomeIcon icon={faEdit} />
                 </Button>

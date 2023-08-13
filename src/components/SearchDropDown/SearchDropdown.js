@@ -1,17 +1,20 @@
-import Dropdown from 'react-bootstrap/Dropdown';
+import ListGroup from 'react-bootstrap/ListGroup';
+
 
 function BasicExample({ tasks }) {
     return (
-        <Dropdown.Menu show>
+
+
+        <ListGroup>
             {
                 tasks?.map((item) => {
                     return (
-                        <h6 key={item.id} className='mt-2' style={{position:'none', textAlign:'center'}}>{item.title}</h6>
+                        <ListGroup.Item key={item.id}>{item.title}</ListGroup.Item>
 
                     )
                 })
             }
-        </Dropdown.Menu>
+        </ListGroup>
     );
 }
 

@@ -4,22 +4,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllTasks } from "../../store/tasksReducer";
 import Loading from "../../components/Loading/Loading";
 import TaskFunc from "../../components/Tasks/TaskFunc";
+import EditModal from "../../components/EditModal";
+import Confirm from "../../components/Confirm"
+import EditModalFunc from "../../components/EditModalFunc";
 import BasicExample from "../../components/SearchDropDown/SearchDropdown";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import AddNewTaskModalFunc from "../../components/AddNewTask/AddNewTaskModalFunc";
+import { useDebounce } from "../../hooks";
 
 
 
 
 export default function ToDoFunc() {
     const [showNewTaskModal, setShowNewTaskModal] = useState(false);
+    const [toggleConfirmModal, setToggleConfirmModal] = useState(false);
     const [searchText, setSearchText] = useState('');
     const { data, isError, isLoading } = useGetAllTasksQuery();
+    const debounced = useDebounce(searchText)
 
-    const { data: searchResults } = useSearchTaskQuery(searchText);
-    console.log('SSSSSSSSSSSSSSSS=====>>>', searchResults);
+    const { data: searchResults } = useSearchTaskQuery(debounced);
     const dispatch = useDispatch();
     const taskData = useSelector((state) => state.tasksReducer.toDoList);
+    const editedTask = useSelector((state) => state.tasksReducer.taskEditObj);
+    const checkedTasks = useSelector((state)=>state.tasksReducer.checkedTasks);
 
 
     useEffect(() => {
@@ -47,25 +54,25 @@ export default function ToDoFunc() {
                             variant="info"
                             className="w-25"
                             onClick={() => { setShowNewTaskModal(prev => !prev) }}
-                        // disabled={checkedTasks.size}
+                            disabled={checkedTasks.length > 0}
                         >
                             Add task
                         </Button>
                     </Col>
                 </Row>
                 <Row className="justify-content-center">
-                    <Col className="text-center mt-5">
+                    <Col className="text-center mt-5" lg="3">
                         <input type="search" value={searchText} onChange={handleSearchChange} />
                     </Col>
                 </Row>
-                {
-                    searchText.length > 0 &&
-                    <Row className="justify-content-center">
-                        <Col className="text-center mt-5" lg="6">
-                            <BasicExample tasks={searchResults} />
+                {/* {
+                    searchResults && <Row className="justify-content-center">
+                        <Col className="text-center mt-2" lg="3">
+                            <BasicExample tasks={searchResults.tasks} />
                         </Col>
                     </Row>
-                }
+                } */}
+
 
                 <Row className="mt-5">
                     {
@@ -74,40 +81,29 @@ export default function ToDoFunc() {
                             return (
                                 <Col key={item.id} sm="12" md="6" lg="4" xl="3">
                                     <TaskFunc item={item} />
-                                    {/* <Tasks item={item}
-                                        handleRemoveSingleTask={this.handleRemoveSingleTask}
-                                        handleCheckedTasks={this.handleCheckedTasks}
-                                        disabledButton={checkedTasks.size}
-                                        handleEditTask={this.handleEditTask}
-                                    /> */}
                                 </Col>
                             )
                         })
                     }
                 </Row>
-                {/* <Row className="justify-content-center" >
+                <Row className="justify-content-center" >
                     <Button
-                        onClick={this.handleToggleShowCofirmModal}
+                        onClick={()=>setToggleConfirmModal(prev=>!prev)}
                         variant="danger"
                         className="w-25 mt-5"
-                        disabled={!checkedTasks.size}
+                        disabled={checkedTasks.length <= 0}
                     >Remove checked tasks</Button>
 
-                </Row> */}
-                {/* <Confirm
+                </Row>
+                <Confirm
                     show={toggleConfirmModal}
-                    onHide={this.tooggleHide}
-                    handleRemovedCheckedTasks={this.handleRemovedCheckedTasks}
-                    count={checkedTasks.size}
-                /> */}
-                {/* {
+                    onHide={()=>setToggleConfirmModal(false)}
+                />
+                {
                     !!editedTask &&
-                    <EditModal
-                        onClose={() => this.handleEditTask(null)}
-                        editTaskData={editedTask}
-                        onSave={this.handleSaveEditedTask}
+                    <EditModalFunc
                     />
-                } */}
+                }
                 {
                     showNewTaskModal &&
                     <AddNewTaskModalFunc

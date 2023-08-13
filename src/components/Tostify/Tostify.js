@@ -3,18 +3,22 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Tostify() {
+    
+    toast.error('Error');
+    // toast.success("IT IS WORK !!!!");
     return (
+    
         <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            the />
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     )
     
 }
