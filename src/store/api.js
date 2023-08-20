@@ -11,8 +11,13 @@ export const apiSLice = createApi({
         getAllTasks: bulder.query({
             query: () => '/tasks'
         }),
+        getSingleTask: bulder.query({
+            query: (id)=> `/tasks/${id}`,
+            providesTags: ['SingleTask'],
+
+        }),
         searchTask:bulder.query({
-            query:(params)=>`/tasks?q=${params}`
+            query:(params)=>`/tasks/search?q=${params}`
         }),
         removeSingleTask: bulder.mutation({
             query: (taskId) => ({
@@ -38,7 +43,9 @@ export const apiSLice = createApi({
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
-            })
+            }),
+            invalidatesTags: ['SingleTask'],
+
         }),
 
         removeCheckedTasks: bulder.mutation({
@@ -63,4 +70,5 @@ export const {
     useSearchTaskQuery,
     useEditSelectedTaskMutation,
     useRemoveCheckedTasksMutation,
+    useGetSingleTaskQuery,
 } = apiSLice;

@@ -1,11 +1,22 @@
 import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Tostify() {
-    
-    toast.error('Error');
-    // toast.success("IT IS WORK !!!!");
+    const errorMessage = useSelector((state) => state.tasksReducer.errorMessage);
+    const successMessage = useSelector((state) => state.tasksReducer.successMessage);
+
+    useEffect(()=>{
+        if (errorMessage) {
+            toast.error(errorMessage);
+          }
+          if (successMessage) {
+            toast.success(successMessage);
+          }
+
+    },[errorMessage, successMessage])
     return (
     
         <ToastContainer

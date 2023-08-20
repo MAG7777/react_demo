@@ -3,13 +3,14 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAddNewTaskMutation } from '../../store/api';
-import { addNewTask } from '../../store/tasksReducer';
+import { addNewTask, setSuccessMessage, setErrorMessage } from '../../store/tasksReducer';
 
 
 export default function AddNewTaskModalFunc({ onClose }) {
+    const titleInputRef = useRef();
     const [addNewTaskRequest, response] = useAddNewTaskMutation();
     const dispatch = useDispatch();
     const [inputFields, setInputFields] = useState({
@@ -19,6 +20,10 @@ export default function AddNewTaskModalFunc({ onClose }) {
         description: "",
 
     });
+
+    useEffect(()=>{
+        titleInputRef.current.focus();
+    },[])
 
     const handleInputChange = (event) => {
 
@@ -40,22 +45,25 @@ export default function AddNewTaskModalFunc({ onClose }) {
 
     const handleAddKeyDown = (event) => {
         if (event.key === "Enter") {
-            handleAddNewTask();
+            handleAddNewTask(event);
         }
 
     }
-    const handleAddNewTask = () => {
-        console.log('inputFields----------->>>', inputFields);
+    const handleAddNewTask = (event) => {
+        event.preventDefault();
+
+        if(!inputFields.title) return;
         addNewTaskRequest(inputFields)
-            // .unwrap()
             .then((res) => {
-                console.log('rrrrrrrrrrrrrrr===>>', res)
+                if(res.error) throw new Error('Something went wrong !!!');
                dispatch(addNewTask(res.data));
+               dispatch(setSuccessMessage(`Task ${res.data.title} succesfully added !!!`));
                onClose();
 
             }
             )
             .catch((error) => {
+                dispatch(setErrorMessage('Task did not added !!!'))
                 console.log(error)
             })
     }
@@ -87,7 +95,7 @@ export default function AddNewTaskModalFunc({ onClose }) {
                                 name="title"
                                 value={inputFields.titleRef}
                                 onChange={handleInputChange}
-                            // ref={this.titleRef}
+                                ref={titleInputRef}
                             />
                         </Col>
                     </Form.Group>

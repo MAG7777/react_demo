@@ -1,4 +1,3 @@
-import ToDo from './pages/ToDo/ToDo';
 import ToDoFunc from './pages/ToDo/ToDoFunc';
 import SingleTask from './pages/SingleTask';
 import NoFound from './pages/NoFound';
@@ -22,7 +21,7 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="*" element={<NoFound />} />
       </Routes>
-      {/* <Tostify /> */}
+      <Tostify />
     </div>
 
   );

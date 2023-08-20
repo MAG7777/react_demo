@@ -21,7 +21,6 @@ export default function TaskFunc({ item }) {
 
         deleteTasks(id)
             .then((resTest) => {
-                console.log('RRRRR INSIDE THEN', resTest);
                 dispatch(removeSingleTask(id))
             })
             .catch((err) => console.log(err))

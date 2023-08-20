@@ -1,7 +1,8 @@
 import ListGroup from 'react-bootstrap/ListGroup';
+import { Link } from 'react-router-dom';
 
 
-function BasicExample({ tasks }) {
+function SearchTaskDropDown({ tasks }) {
     return (
 
 
@@ -9,7 +10,13 @@ function BasicExample({ tasks }) {
             {
                 tasks?.map((item) => {
                     return (
-                        <ListGroup.Item key={item.id}>{item.title}</ListGroup.Item>
+                        <Link to={`/task/${item.id}`}>
+                            <ListGroup.Item key={item.id}>
+
+                                {item.title}
+                            </ListGroup.Item>
+
+                        </Link>
 
                     )
                 })
@@ -18,4 +25,4 @@ function BasicExample({ tasks }) {
     );
 }
 
-export default BasicExample;
+export default SearchTaskDropDown;

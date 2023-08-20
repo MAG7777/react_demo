@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     toDoList: [],
     taskEditObj: null,
-    checkedTasks:[],
+    checkedTasks: [],
+    successMessage: null,
+    errorMessage: null,
 }
 const taskSlice = createSlice({
     name: 'tasks',
@@ -32,19 +34,27 @@ const taskSlice = createSlice({
             state.toDoList[index] = action.payload.data;
         },
 
-        saveCheckedTasks(state, action){
+        saveCheckedTasks(state, action) {
 
-            if(state.checkedTasks.find((item)=>item === action.payload)){
-                 state.checkedTasks = state.checkedTasks.filter(item=>item !== action.payload)
-            }
-            else{
-                state.checkedTasks = [...state.checkedTasks, action.payload];
-
+            const id = action.payload;
+            const index = state.checkedTasks.indexOf(id);
+            if (index === -1) {
+                state.checkedTasks.push(id);
+            } else {
+                state.checkedTasks.splice(index, 1);
             }
         },
 
-        cleanCheckedTassk(state){
+        cleanCheckedTassk(state) {
             state.checkedTasks = [];
+        },
+
+        setSuccessMessage(state, action) {
+            state.successMessage = action.payload;
+
+        },
+        setErrorMessage(state, action) {
+            state.errorMessage = action.payload
         }
     }
 
@@ -59,6 +69,8 @@ export const {
     editTask,
     putEditedTaskOnList,
     saveCheckedTasks,
-    cleanCheckedTassk
+    cleanCheckedTassk,
+    setSuccessMessage,
+    setErrorMessage
 } = taskSlice.actions;
 export default taskSlice.reducer;

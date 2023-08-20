@@ -4,14 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllTasks } from "../../store/tasksReducer";
 import Loading from "../../components/Loading/Loading";
 import TaskFunc from "../../components/Tasks/TaskFunc";
-import EditModal from "../../components/EditModal";
 import Confirm from "../../components/Confirm"
 import EditModalFunc from "../../components/EditModalFunc";
-import BasicExample from "../../components/SearchDropDown/SearchDropdown";
+import SearchTaskDropDown from "../../components/SearchDropDown/SearchDropdown";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import AddNewTaskModalFunc from "../../components/AddNewTask/AddNewTaskModalFunc";
-import { useDebounce } from "../../hooks";
-
+import { useDebounce } from "../../customHook";
 
 
 
@@ -65,13 +63,13 @@ export default function ToDoFunc() {
                         <input type="search" value={searchText} onChange={handleSearchChange} />
                     </Col>
                 </Row>
-                {/* {
+                {
                     searchResults && <Row className="justify-content-center">
                         <Col className="text-center mt-2" lg="3">
-                            <BasicExample tasks={searchResults.tasks} />
+                            <SearchTaskDropDown tasks={searchResults} />
                         </Col>
                     </Row>
-                } */}
+                }
 
 
                 <Row className="mt-5">
