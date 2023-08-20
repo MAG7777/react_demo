@@ -1,4 +1,3 @@
-import ToDo from './pages/ToDo/ToDo';
 import ToDoFunc from './pages/ToDo/ToDoFunc';
 import SingleTask from './pages/SingleTask';
 import NoFound from './pages/NoFound';
@@ -7,9 +6,6 @@ import { Route, Routes } from 'react-router-dom';
 import AboutUs from './pages/AboutUs/AboutUs';
 import Tostify from './components/Tostify/Tostify';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
-
 
 
 function App() {
@@ -22,7 +18,7 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="*" element={<NoFound />} />
       </Routes>
-      {/* <Tostify /> */}
+      <Tostify />
     </div>
 
   );

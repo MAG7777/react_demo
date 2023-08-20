@@ -12,13 +12,15 @@ export const apiSLice = createApi({
             query: () => '/tasks'
         }),
         searchTask:bulder.query({
-            query:(params)=>`/tasks?q=${params}`
+            query:(params)=>`/tasks/search?q=${params}`
         }),
         removeSingleTask: bulder.mutation({
             query: (taskId) => ({
                 url: `/tasks/${taskId}`,
                 method: 'DELETE'
-            })
+            }),
+            invalidatesTags: (result, error, id) => [{ type: 'Task', id }],
+
         }),
         addNewTask: bulder.mutation({
             query: (payload) => ({
@@ -42,17 +44,20 @@ export const apiSLice = createApi({
         }),
 
         removeCheckedTasks: bulder.mutation({
-            query: (payload)=>({
+            query: (payload) => ({
                 url: '/tasks',
                 method: 'DELETE',
-                body:JSON.stringify({ids:payload}),
+                body: JSON.stringify({ ids: payload }),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
             })
         })
 
-    })
+    }),
+
+    // overrideExisting: false,
+
 })
 
 

@@ -3,13 +3,14 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAddNewTaskMutation } from '../../store/api';
-import { addNewTask } from '../../store/tasksReducer';
+import { addNewTask, setErrorMessage, setSuccessMessage } from '../../store/tasksReducer';
 
 
 export default function AddNewTaskModalFunc({ onClose }) {
+    const titleInput = useRef()
     const [addNewTaskRequest, response] = useAddNewTaskMutation();
     const dispatch = useDispatch();
     const [inputFields, setInputFields] = useState({
@@ -19,6 +20,11 @@ export default function AddNewTaskModalFunc({ onClose }) {
         description: "",
 
     });
+
+
+    useEffect(() => {
+        titleInput.current.focus();
+    }, [])
 
     const handleInputChange = (event) => {
 
@@ -40,22 +46,27 @@ export default function AddNewTaskModalFunc({ onClose }) {
 
     const handleAddKeyDown = (event) => {
         if (event.key === "Enter") {
-            handleAddNewTask();
+            handleAddNewTask(event);
         }
 
     }
-    const handleAddNewTask = () => {
-        console.log('inputFields----------->>>', inputFields);
+    const handleAddNewTask = (event) => {
+        event.preventDefault();
+
+
+        if (!inputFields.title) return;
+
         addNewTaskRequest(inputFields)
-            // .unwrap()
             .then((res) => {
-                console.log('rrrrrrrrrrrrrrr===>>', res)
-               dispatch(addNewTask(res.data));
-               onClose();
+                if (res.error) throw new Error("New task did not add successfuly !!!");
+                dispatch(addNewTask(res.data));
+                dispatch(setSuccessMessage(`Task ${res.data.title} successfuly added !!!`));
+                onClose();
 
             }
             )
             .catch((error) => {
+                dispatch(setErrorMessage("Task did not add successfuly !!!"));
                 console.log(error)
             })
     }
@@ -87,7 +98,7 @@ export default function AddNewTaskModalFunc({ onClose }) {
                                 name="title"
                                 value={inputFields.titleRef}
                                 onChange={handleInputChange}
-                            // ref={this.titleRef}
+                                ref={titleInput}
                             />
                         </Col>
                     </Form.Group>

@@ -4,13 +4,18 @@ import { useNavigate } from 'react-router';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import request from  '../utils/apis'
+import { removeSingleTask, setErrorMessage, setSuccessMessage } from '../store/tasksReducer';
+import { useRemoveSingleTaskMutation } from '../store/api';
+import { useDispatch } from 'react-redux';
+import request from '../utils/apis'
 
 const REACT_APP_URL_API = process.env.REACT_APP_URL_API;
 
 
 export default function SingleTask() {
     const [taskData, setTaskData] = useState(null);
+    const [deleteTask, response] = useRemoveSingleTaskMutation();
+    const dispatch = useDispatch();
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -32,10 +37,37 @@ export default function SingleTask() {
 
     const handleRemoveSingleTask = (taskId) => {
 
-        request(`${REACT_APP_URL_API}/tasks/${taskId}`, 'DELETE')
-            .then(navigate('/'))
-            .catch(error => console.log(error))
+        // request(`${REACT_APP_URL_API}/tasks/${taskId}`, 'DELETE')
+        //     .then(navigate('/'))
+        //     .catch(error => console.log(error))
 
+        deleteTask(taskId)
+            .then((resp => {
+                if (resp.error) throw new Error();
+                dispatch(removeSingleTask(taskId));
+                dispatch(setSuccessMessage('Task successfuly deleted !!!'))
+                navigate('/');
+
+            }))
+            .catch((error) => {
+                dispatch(setErrorMessage('Task did not delete !!!'));
+                console.log(error)
+            });
+
+    }
+
+
+    const handleDelete = async (id) => {
+        await deleteTask(id)
+        dispatch(
+            useRemoveSingleTaskMutation.util.updateQueryData(
+                'useRemoveSingleTaskMutation',
+                undefined,
+                (draft) => (
+                    Object.assign(draft, {ID: undefined})
+                )
+           )
+        )
     }
 
 

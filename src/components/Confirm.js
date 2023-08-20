@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRemoveCheckedTasksMutation } from '../store/api';
-import { cleanCheckedTassk,getAllTasks } from '../store/tasksReducer';
+import { cleanCheckedTassk, getAllTasks, setErrorMessage, setSuccessMessage } from '../store/tasksReducer';
 import { memo } from 'react';
 
 function Confirm(props) {
@@ -15,18 +15,20 @@ function Confirm(props) {
         let newToDoLiST = [...toDoList];
         deleteMultipleTask(checkedTasks)
             .then((obj) => {
-                console.log('obj response', response);
+                if(obj.error) throw new Error('Tasks did not removed !!!')
+                console.log('obj response', obj);
                 checkedTasks.forEach(itemId => {
                     newToDoLiST = newToDoLiST.filter(item => item.id !== itemId)
-                    console.log('tttttttttttt', newToDoLiST);
-
                 })
                 dispatch(getAllTasks(newToDoLiST));
                 dispatch(cleanCheckedTassk());
+                dispatch(setSuccessMessage('Tasks successfuly removed !!!'))
                 props.onHide();
 
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                dispatch(setErrorMessage('Tasks did not removed !!!'))
+                console.log(err)});
     }
 
 

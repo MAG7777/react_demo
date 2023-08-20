@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRemoveSingleTaskMutation , useSearchTaskQuery} from "../../store/api";
+import { useRemoveSingleTaskMutation, useSearchTaskQuery } from "../../store/api";
 import { Button } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -8,26 +8,39 @@ import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import classes from './tasks.module.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { removeSingleTask, editTask, saveCheckedTasks } from "../../store/tasksReducer";
+import {
+    removeSingleTask,
+    editTask,
+    saveCheckedTasks,
+    setErrorMessage,
+    setSuccessMessage
+} from "../../store/tasksReducer";
 
 export default function TaskFunc({ item }) {
-    const checkedTasks = useSelector(state=>state.tasksReducer.checkedTasks);
+    const checkedTasks = useSelector(state => state.tasksReducer.checkedTasks);
     const [isChecked, setIsChecked] = useState(false);
     const dispatch = useDispatch();
-    const [deleteTasks, response] = useRemoveSingleTaskMutation();
+    const [deleteTasks, { isLoading, isError, data }] = useRemoveSingleTaskMutation();
 
     const handleRemoveSingleTask = (id) => {
-        console.log('RRRRR', response);
 
         deleteTasks(id)
-            .then((resTest) => {
-                console.log('RRRRR INSIDE THEN', resTest);
-                dispatch(removeSingleTask(id))
+        // .unwrap(id)
+            .then((res) => {
+                console.log('RRRR=====>>', res);
+                console.log('RESONSE DATA----->>>', data);
+                if (res.error) throw new Error('Task did not delete !!!');
+                dispatch(removeSingleTask(id));
+                dispatch(setSuccessMessage(`Task ${res.title} successfuly deleted !!!`))
             })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                dispatch(setErrorMessage('Task did not delete !!!'))
+                console.log(err)
+            })
+            
     }
 
-    const toggleCheckbox = (id)=>{
+    const toggleCheckbox = (id) => {
         dispatch(saveCheckedTasks(id))
     }
 

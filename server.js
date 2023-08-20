@@ -6,9 +6,8 @@ const middlewares = jsonServer.defaults();
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
-server.get('/tasks', (req, res) => {
+server.get('/tasks/search', (req, res) => {
     const { q } = req.query;
-    console.log('qqqqqq--->>>', q);
     const tasks = router.db.get('tasks').value();
   
     if (q) {
@@ -19,7 +18,7 @@ server.get('/tasks', (req, res) => {
       );
       res.json(results);
     } else {
-      res.json(tasks);
+      res.json([]);
     }
   });
 
