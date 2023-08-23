@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useGetAllTasksQuery, useSearchTaskQuery } from "../../store/api";
+import { useGetAllTasksQuery, useSearchTaskQuery } from "../../redux/services/tasks/api";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllTasks } from "../../store/tasksReducer";
+import { getAllTasks } from "../../redux/features/tasks/tasksReducer";
 import Loading from "../../components/Loading/Loading";
 import TaskFunc from "../../components/Tasks/TaskFunc";
 import Confirm from "../../components/Confirm"

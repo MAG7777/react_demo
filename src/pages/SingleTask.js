@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { editTask } from '../store/tasksReducer';
+import { editTask } from '../redux/features/tasks/tasksReducer';
 import EditModalFunc from '../components/EditModalFunc';
 import Loading from '../components/Loading/Loading';
 import request from '../utils/apis'
-import { useGetSingleTaskQuery } from '../store/api';
+import { useGetSingleTaskQuery } from '../redux/services/tasks/api';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 

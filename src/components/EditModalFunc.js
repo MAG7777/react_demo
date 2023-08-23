@@ -6,8 +6,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { useSelector, useDispatch } from 'react-redux';
-import { editTask, putEditedTaskOnList } from '../store/tasksReducer';
-import { useEditSelectedTaskMutation } from '../store/api';
+import { editTask, putEditedTaskOnList } from '../redux/features/tasks/tasksReducer';
+import { useEditSelectedTaskMutation } from '../redux/services/tasks/api';
 
 
 

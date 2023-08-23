@@ -4,6 +4,7 @@ import NoFound from './pages/NoFound';
 import NavBar from './components/NavBar/NavBar';
 import { Route, Routes } from 'react-router-dom';
 import AboutUs from './pages/AboutUs/AboutUs';
+import Registration from './pages/Registration/Registration';
 import Tostify from './components/Tostify/Tostify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<ToDoFunc />} />
         <Route path="/task/:id" element={<SingleTask />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/registration" element={<Registration />} />
         <Route path="*" element={<NoFound />} />
       </Routes>
       <Tostify />
