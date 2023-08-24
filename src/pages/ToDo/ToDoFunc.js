@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useGetAllTasksQuery, useSearchTaskQuery } from "../../store/api";
+import { useGetAllTasksQuery, useSearchTaskQuery } from "../../redux/services/api";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllTasks } from "../../store/tasksReducer";
+import { getAllTasks } from "../../redux/features/tasksReducer";
 import Loading from "../../components/Loading/Loading";
 import TaskFunc from "../../components/Tasks/TaskFunc";
 import Confirm from "../../components/Confirm"
@@ -10,6 +10,7 @@ import SearchTaskDropDown from "../../components/SearchDropDown/SearchDropdown";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import AddNewTaskModalFunc from "../../components/AddNewTask/AddNewTaskModalFunc";
 import { useDebounce } from "../../customHook";
+import { useNavigate } from "react-router";
 
 
 
@@ -18,7 +19,8 @@ export default function ToDoFunc() {
     const [toggleConfirmModal, setToggleConfirmModal] = useState(false);
     const [searchText, setSearchText] = useState('');
     const { data, isError, isLoading } = useGetAllTasksQuery();
-    const debounced = useDebounce(searchText)
+    const debounced = useDebounce(searchText);
+    const navigate = useNavigate();
 
     const { data: searchResults } = useSearchTaskQuery(debounced);
     const dispatch = useDispatch();
@@ -32,6 +34,13 @@ export default function ToDoFunc() {
             dispatch(getAllTasks(data));
         }
     }, [data])
+
+    useEffect(()=>{
+        const token = localStorage.getItem('token');
+        if(!token){
+            navigate('/signin')
+        }
+    },[])
 
 
     const toogleMOdal = () => {
