@@ -5,8 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useAddNewTaskMutation } from '../../store/api';
-import { addNewTask, setSuccessMessage, setErrorMessage } from '../../store/tasksReducer';
+import { useAddNewTaskMutation } from '../../redux/services/api';
+import { addNewTask, setSuccessMessage, setErrorMessage } from '../../redux/features/tasksReducer';
 
 
 export default function AddNewTaskModalFunc({ onClose }) {

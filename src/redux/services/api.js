@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const BASE_URL = process.env.REACT_APP_URL_API;
+console.log('UUUUUUUUUU====>>>', BASE_URL)
+
 
 
 export const apiSLice = createApi({

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRemoveSingleTaskMutation , useSearchTaskQuery} from "../../store/api";
+import { useRemoveSingleTaskMutation , useSearchTaskQuery} from "../../redux/services/api";
 import { Button } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -8,7 +8,7 @@ import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import classes from './tasks.module.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { removeSingleTask, editTask, saveCheckedTasks } from "../../store/tasksReducer";
+import { removeSingleTask, editTask, saveCheckedTasks } from "../../redux/features/tasksReducer";
 
 export default function TaskFunc({ item }) {
     const checkedTasks = useSelector(state=>state.tasksReducer.checkedTasks);
