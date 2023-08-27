@@ -3,6 +3,7 @@ import SingleTask from './pages/SingleTask';
 import NoFound from './pages/NoFound';
 import NavBar from './components/NavBar/NavBar';
 import { Route, Routes } from 'react-router-dom';
+import Home from './pages/Home/Home';
 import AboutUs from './pages/AboutUs/AboutUs';
 import Tostify from './components/Tostify/Tostify';
 import Registration from './pages/Register/Register';
@@ -18,7 +19,8 @@ function App() {
     <div className="mainDiv">
       <NavBar />
       <Routes>
-        <Route path="/" element={<ToDoFunc />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/todo" element={<ToDoFunc />} />
         <Route path="/task/:id" element={<SingleTask />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/register" element={<Registration />} />

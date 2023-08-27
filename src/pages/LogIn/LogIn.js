@@ -1,18 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useSignInMutation } from '../../redux/services/userApi';
 import { useNavigate } from 'react-router';
+import { setToken } from '../../utils/utils';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAutorization } from '../../redux/features/authReducer';
+import { Link } from 'react-router-dom';
 
 export default function LogIn() {
+    const successAuto = useSelector((state) => state.userReducer.successAuthorization);
+    const disppatch = useDispatch();
     const [signIn] = useSignInMutation();
     const navigate = useNavigate();
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
     });
+
+
+    useEffect(() => {
+        if (successAuto) {
+            navigate('/');
+        }
+    }, [])
 
     const handleOnchange = (event) => {
         setLoginData(prev => ({
@@ -23,22 +36,22 @@ export default function LogIn() {
     }
 
 
-    const handleSignIn = (e)=>{
+    const handleSignIn = (e) => {
         e.preventDefault();
-        const {email, password} = loginData;
-        if(!email || !password){
+        const { email, password } = loginData;
+        if (!email || !password) {
             return;
         }
 
-        signIn({password})
-        .then((res)=>{
-            console.log('rrrrrrrrrrrrrr===>>>', res)
-            if(res.error) throw new Error('Sign in field !!!');
-            if(res.data.token){
-                localStorage.setItem('token', res.data.token)
-                navigate('/');
-            }
-        })
+        signIn({ password })
+            .then((res) => {
+                if (res.error) throw new Error('Sign in field !!!');
+                if (res.data.token) {
+                    disppatch(setAutorization(true));
+                    setToken(res.data.token);
+                    navigate('/todo');
+                }
+            })
 
     }
 
@@ -74,6 +87,7 @@ export default function LogIn() {
                         onChange={handleOnchange} />
                 </Col>
             </Form.Group>
+            <p><Link to='/register'>Registrated ?</Link></p>
             <Button type="submit" variant="info" onClick={handleSignIn}>Sign In</Button>
         </Form>
     )

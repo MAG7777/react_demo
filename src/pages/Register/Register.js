@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import Loading from '../../components/Loading/Loading';
 import { Button } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
@@ -6,9 +6,13 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router';
 import { useRegisterNewUserMutation } from '../../redux/services/userApi';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 
 export default function Registration() {
-    const [sumbitRegisterData, ] = useRegisterNewUserMutation();
+    const successAuto = useSelector((state) => state.userReducer.successAuthorization);
+    const [sumbitRegisterData,] = useRegisterNewUserMutation();
     const navigate = useNavigate();
 
     const [signUpData, setSignUpData] = useState({
@@ -18,6 +22,12 @@ export default function Registration() {
     })
 
     const [passwordError, setPasswordError] = useState(false);
+
+    useEffect(() => {
+        if (successAuto) {
+            navigate('/');
+        }
+    }, [])
 
     const handleOnchange = (event) => {
         setSignUpData(prev => ({
@@ -45,7 +55,7 @@ export default function Registration() {
         sumbitRegisterData({ email, password })
             .then((res => {
                 if (res.error) throw new Error('Registration field !!!');
-                if(res.data.token){
+                if (res.data.token) {
                     navigate('/signin')
                 }
             }))
@@ -106,6 +116,7 @@ export default function Registration() {
                         onChange={handleOnchange} />
                 </Col>
             </Form.Group>
+            <p><Link to='/signin'>Have already account ?</Link></p>
             <Button type="submit" variant="info" onClick={handleSubmitRegistration}>Sign Up</Button>
         </Form>
     );
