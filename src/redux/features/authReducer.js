@@ -12,7 +12,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setAutorization(state, payload) {
-            state.successAuthorization = payload;
+            state.successAuthorization = payload.payload;
         }
     }
 
